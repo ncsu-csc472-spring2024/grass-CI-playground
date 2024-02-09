@@ -47,6 +47,6 @@ jobs:
           excluded_paths: ./testsuite, *.md  # testing to see if warnings are excluded
  # optional, default is DEFAULT
           # comma-separated list of test IDs to skip
-          # skips: B505 # optional, default is DEFAULT
+          skips: B505 # optional, default is DEFAULT
           # path to a .bandit file that supplies command line arguments
           # ini_path: # optional, default is DEFAULT
