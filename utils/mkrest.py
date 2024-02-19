@@ -81,7 +81,7 @@ tmp_data = read_file(tmp_file)
 if tmp_data:
     sys.stdout.write(tmp_data)
 arguments = ["pandoc", "-s", "-r", "html", src_file, "-w", "rst"]
-process = subprocess.Popen(arguments, stdout=subprocess.PIPE)
+process = subprocess.Popen(arguments, shell=False, stdout=subprocess.PIPE)
 html_text = process.communicate()[0]
 if html_text:
     for k, v in replacement.iteritems():
