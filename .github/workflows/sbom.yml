@@ -1,6 +1,6 @@
 
  ---
-name: Generate SBOM
+name: SBOM
 
 on:
   push:
