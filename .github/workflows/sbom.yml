@@ -1,0 +1,25 @@
+
+ ---
+name: Generate SBOM
+
+on:
+  push:
+    branches:
+      - main
+      - sbom
+
+  schedule:
+    # Check every Saturday at 18:36
+    - cron: 36 18 * * 6
+
+
+gen-sbom:
+  runs-on: ubuntu-latest
+  steps:
+  - uses: actions/checkout@v3
+  - uses: advanced-security/generate-sbom-action@v1
+    id: gensbom
+  - uses: actions/upload-artifact@v3
+    with:
+      name: sbom
+      path: ${{ steps.gensbom.outputs.fileName }}
