@@ -5,6 +5,7 @@ on:
     branches: 
      - dismissalCheckout   # Trigger only test branch, remember to remove before PRing to grass
                            # in the grass repo this will be changed to a scheduled event (e.g., every 24 hours)
+     - advisoryCheckout
 
 jobs:
     get-dismissals-data:
@@ -15,6 +16,8 @@ jobs:
      
              # will remove this step once some testing has been done to make sure it is unnecessary
            - uses: actions/checkout@v4 # Checkout repository code
+            -uses: actions/github-script@v7
+
     
            - name: Install dependencies (if needed for parsing security tool response)
              run: |
@@ -23,20 +26,27 @@ jobs:
                  
    
            - name: Get Security Alerts
-             run: |
+             script: |
+                // Your JavaScript code here
 
-               #get only dismissed alerts using curl
-               # path to local repo will be changed to the path to the repo in grass
+                // Octokit.js
+                // https://github.com/octokit/core.js#readme
 
-               curl -L \
-                -H "Accept: application/vnd.github+json" \
-                -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-                -H "X-GitHub-Api-Version: 2022-11-28" \
-                https://api.github.com/repos/ncsu-csc472-spring2024/grass-CI-playground/code-scanning/alerts?state=dismissed > alerts.json
-                echo "alerts retrieved successfully!"
+                const octokit = new Octokit({
+                  auth: ${{ secrets.GITHUB_TOKEN }}
+                })
+                
+                alerts = await octokit.request('GET /repos/csu-csc472-spring2024/grass-CI-playground/code-scanning/alerts?state=dismissed', {
+                  owner: 'csu-csc472-spring2024',
+                  repo: 'grass-CI-playground',
+                  headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                  }
+                })
+                // write the  alerts to a file
+                fs.writeFileSync('alerts.json', JSON.stringify(alerts, null, 2))
+                console.log('alerts retrieved successfully!')
 
-
-         
 
              #trigger a rerun
            - name: Upload the coding alerts as artifact
