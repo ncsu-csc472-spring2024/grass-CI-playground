@@ -16,17 +16,16 @@ jobs:
      
              # will remove this step once some testing has been done to make sure it is unnecessary
            - uses: actions/checkout@v4 # Checkout repository code
-            -uses: actions/github-script@v7
-
-    
+  
            - name: Install dependencies (if needed for parsing security tool response)
              run: |
                 # Add any package installation commands here (e.g., pip install requests)
                   sudo apt-get install jq  # Install jq for parsing JSON
                  
-   
            - name: Get Security Alerts
-             script: |
+           - uses: actions/github-script@v7
+            with:
+               script: |
                 // Your JavaScript code here
 
                 // Octokit.js
